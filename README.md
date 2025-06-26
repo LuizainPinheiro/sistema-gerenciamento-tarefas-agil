@@ -35,7 +35,7 @@ O repositório está organizado da seguinte forma:
 
 Para executar o sistema, siga os passos abaixo:
 1.  Clone este repositório: 
-2.  Navegue até o diretório do projeto: `cd nome-do-seu-repositorio`
+2.  Navegue até o diretório do projeto: https://github.com/LuizainPinheiro/sistema-gerenciamento-tarefas-agil.git
 3.  Instale as dependências: `[Comando de instalação de dependências, ex: pip install -r requirements.txt]`
 4.  Execute a aplicação: `[Comando para iniciar a aplicação, ex: python app.py]`
 
