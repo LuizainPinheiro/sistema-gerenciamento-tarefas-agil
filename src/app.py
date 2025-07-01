@@ -3,143 +3,135 @@
 tarefas = []
 proximo_id = 1
 
-def criar_tarefa(titulo, descricao, data_vencimento):
-    """Cria uma nova tarefa e a adiciona à lista."""
-    global proximo_id
-    if not titulo or not descricao or not data_vencimento:
-     
-        if __name__ == "__main__":
-            print("Erro: Todos os campos (título, descrição, data de vencimento) são obrigatórios.")
+def resetar_estado_tarefas():
+    global tarefas, proximo_id
+    tarefas.clear()
+    proximo_id = 1
+
+def criar_tarefa(titulo, descricao, status, data_vencimento, prioridade):
+    if not titulo or not descricao or not status or not data_vencimento or not prioridade:
         return None
 
+    global proximo_id
     tarefa = {
         "id": proximo_id,
         "titulo": titulo,
         "descricao": descricao,
-        "status": "A Fazer",
-        "data_vencimento": data_vencimento
+        "status": status,
+        "data_vencimento": data_vencimento,
+        "prioridade": prioridade
     }
     tarefas.append(tarefa)
     proximo_id += 1
     return tarefa
 
 def listar_tarefas():
-    """Retorna todas as tarefas cadastradas."""
     return tarefas
 
-def atualizar_tarefa(id_tarefa, novo_titulo=None, nova_descricao=None, novo_status=None, nova_data_vencimento=None):
-    """
-    Atualiza os detalhes de uma tarefa existente.
-    Retorna True se a tarefa for encontrada e atualizada, False caso contrário.
-    """
+def buscar_tarefa_por_id(tarefa_id):
     for tarefa in tarefas:
-        if tarefa["id"] == id_tarefa:
-            if novo_titulo is not None:
-                tarefa["titulo"] = novo_titulo
-            if nova_descricao is not None:
-                tarefa["descricao"] = nova_descricao
-            if novo_status is not None:
-             
-                tarefa["status"] = novo_status
-            if nova_data_vencimento is not None:
-                tarefa["data_vencimento"] = nova_data_vencimento
-            return True
-    return False 
+        if tarefa["id"] == tarefa_id:
+            return tarefa
+    return None
 
-def excluir_tarefa(id_tarefa):
-    
-    global tarefas
-    
-    tarefas_mantidas = [t for t in tarefas if t["id"] != id_tarefa]
-
-    if len(tarefas_mantidas) < len(tarefas):
-        tarefas[:] = tarefas_mantidas 
+def atualizar_tarefa(tarefa_id, novo_titulo=None, nova_descricao=None, novo_status=None, nova_data_vencimento=None, nova_prioridade=None):
+    tarefa = buscar_tarefa_por_id(tarefa_id)
+    if tarefa:
+        if novo_titulo is not None:
+            tarefa["titulo"] = novo_titulo
+        if nova_descricao is not None:
+            tarefa["descricao"] = nova_descricao
+        if novo_status is not None:
+            tarefa["status"] = novo_status
+        if nova_data_vencimento is not None:
+            tarefa["data_vencimento"] = nova_data_vencimento
+        if nova_prioridade is not None:
+            tarefa["prioridade"] = nova_prioridade
         return True
     return False
 
-
-def resetar_estado_tarefas():
-   
-    global tarefas, proximo_id
-    tarefas.clear() 
-    proximo_id = 1   
-
-
-if __name__ == "__main__":
-    print("--- Sistema de Gerenciamento de Tarefas (CLI) ---")
+def excluir_tarefa(tarefa_id):
+    global tarefas
+    initial_len = len(tarefas)
+    new_tarefas = [t for t in tarefas if t["id"] != tarefa_id]
     
+    if len(new_tarefas) < initial_len:
+        tarefas.clear()
+        tarefas.extend(new_tarefas)
+        return True
+    return False
+
+def mostrar_menu():
+    print("\n--- Sistema de Gerenciamento de Tarefas ---")
+    print("1. Criar Tarefa")
+    print("2. Listar Tarefas")
+    print("3. Atualizar Tarefa")
+    print("4. Excluir Tarefa")
+    print("5. Sair")
+    print("------------------------------------------")
+
+def main():
     while True:
-        print("\nMenu:")
-        print("1. Criar Nova Tarefa")
-        print("2. Visualizar Todas as Tarefas")
-        print("3. Atualizar Tarefa Existente")
-        print("4. Excluir Tarefa")
-        print("5. Sair")
-        
-        escolha = input("Digite sua opção: ")
+        mostrar_menu()
+        escolha = input("Escolha uma opção: ")
 
         if escolha == '1':
-            print("\n--- Criar Tarefa ---")
-            titulo = input("  Título: ")
-            descricao = input("  Descrição: ")
-            data_vencimento = input("  Data de Vencimento (AAAA-MM-DD): ")
+            titulo = input("Digite o título da tarefa: ")
+            descricao = input("Digite a descrição da tarefa: ")
+            status = input("Digite o status da tarefa (A Fazer, Em Progresso, Concluído): ")
+            data_vencimento = input("Digite a data de vencimento (YYYY-MM-DD): ")
+            prioridade = input("Digite a prioridade da tarefa (Baixa, Média, Alta): ")
             
-            nova_tarefa = criar_tarefa(titulo, descricao, data_vencimento)
-            if nova_tarefa: 
-                print(f"Tarefa '{nova_tarefa['titulo']}' (ID: {nova_tarefa['id']}) criada com sucesso.")
-        
-        elif escolha == '2':
-            print("\n--- Lista de Tarefas ---")
-            todas_tarefas = listar_tarefas()
-            if not todas_tarefas:
-                print("  Nenhuma tarefa cadastrada até o momento.")
+            tarefa_criada = criar_tarefa(titulo, descricao, status, data_vencimento, prioridade)
+            if tarefa_criada:
+                print("Tarefa criada com sucesso!")
             else:
+                print("Erro: Todos os campos (Título, Descrição, Status, Data de Vencimento, Prioridade) são obrigatórios.")
+
+        elif escolha == '2':
+            todas_tarefas = listar_tarefas()
+            if todas_tarefas:
+                print("\n--- Lista de Tarefas ---")
                 for t in todas_tarefas:
-                    print(f"  ID: {t['id']} | Título: {t['titulo']} | Status: {t['status']} | Vencimento: {t['data_vencimento']}")
-            print("--------------------------")
-        
+                    print(f"ID: {t['id']}, Título: {t['titulo']}, Status: {t['status']}, Vencimento: {t['data_vencimento']}, Prioridade: {t['prioridade']}")
+                print("------------------------")
+            else:
+                print("Nenhuma tarefa cadastrada.")
         elif escolha == '3':
-            print("\n--- Atualizar Tarefa ---")
             try:
-                id_para_atualizar = int(input("  Digite o ID da tarefa para atualizar: "))
-                
-              
-                novo_status = input("  Novo Status (A Fazer, Em Progresso, Concluído - deixe em branco para não alterar): ")
-                novo_titulo = input("  Novo Título (deixe em branco para não alterar): ")
-                nova_descricao = input("  Nova Descrição (deixe em branco para não alterar): ")
-                nova_data_vencimento = input("  Nova Data de Vencimento (AAAA-MM-DD - deixe em branco para não alterar): ")
+                tarefa_id = int(input("Digite o ID da tarefa a ser atualizada: "))
+                tarefa_existente = buscar_tarefa_por_id(tarefa_id)
+                if not tarefa_existente:
+                    print("Tarefa não encontrada.")
+                    continue
 
-                
-                atualizado = atualizar_tarefa(
-                    id_para_atualizar,
-                    novo_titulo if novo_titulo else None,
-                    nova_descricao if nova_descricao else None,
-                    novo_status if novo_status else None,
-                    nova_data_vencimento if nova_data_vencimento else None
-                )
-                if atualizado:
-                    print(f"Tarefa ID {id_para_atualizar} atualizada com sucesso.")
+                print("\nDeixe em branco para manter o valor atual.")
+                novo_titulo = input(f"Novo título (atual: {tarefa_existente['titulo']}): ") or None
+                nova_descricao = input(f"Nova descrição (atual: {tarefa_existente['descricao']}): ") or None
+                novo_status = input(f"Novo status (atual: {tarefa_existente['status']}): ") or None
+                nova_data_vencimento = input(f"Nova data de vencimento (atual: {tarefa_existente['data_vencimento']}): ") or None
+                nova_prioridade = input(f"Nova prioridade (atual: {tarefa_existente['prioridade']}): ") or None
+
+                if atualizar_tarefa(tarefa_id, novo_titulo, nova_descricao, novo_status, nova_data_vencimento, nova_prioridade):
+                    print("Tarefa atualizada com sucesso!")
                 else:
-                    print(f"Erro: Tarefa ID {id_para_atualizar} não encontrada.")
+                    print("Erro ao atualizar tarefa. Verifique o ID.")
             except ValueError:
-                print("ID inválido. Por favor, digite um número inteiro.")
-
+                print("ID inválido. Digite um número inteiro.")
         elif escolha == '4':
-            print("\n--- Excluir Tarefa ---")
             try:
-                id_para_excluir = int(input("  Digite o ID da tarefa para excluir: "))
-                excluido = excluir_tarefa(id_para_excluir)
-                if excluido:
-                    print(f"Tarefa ID {id_para_excluir} excluída com sucesso.")
+                tarefa_id = int(input("Digite o ID da tarefa a ser excluída: "))
+                if excluir_tarefa(tarefa_id):
+                    print("Tarefa excluída com sucesso!")
                 else:
-                    print(f"Erro: Tarefa ID {id_para_excluir} não encontrada.")
+                    print("Tarefa não encontrada.")
             except ValueError:
-                print("ID inválido. Por favor, digite um número inteiro.")
-
+                print("ID inválido. Digite um número inteiro.")
         elif escolha == '5':
-            print("Encerrando o sistema. Até logo!")
+            print("Saindo do sistema. Até mais!")
             break
-        
         else:
-            print("Opção inválida. Por favor, escolha um número válido do menu.")
+            print("Opção inválida. Por favor, tente novamente.")
 
+if __name__ == "__main__":
+    main()
