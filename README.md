@@ -76,7 +76,20 @@ O workflow de CI pode ser visualizado e seus resultados acompanhados na aba '[Ac
 
 ## 7. Histórico de Mudanças de Escopo
 
-*(Esta seção será preenchida posteriormente, durante a simulação de gestão de mudanças.)*
+7. Histórico de Mudanças de Escopo
+Este projeto adota uma abordagem ágil, permitindo a adaptação a novos requisitos e mudanças de escopo ao longo do desenvolvimento. As alterações significativas no escopo são documentadas aqui para manter a transparência e o rastreamento.
+
+### Mudança 1: Adição de Prioridade em Tarefas (01/07/2025)
+
+* **Descrição:** Foi identificado um novo requisito para que as tarefas possuam um nível de prioridade.
+* **Requisito Detalhado:** Cada tarefa deverá incluir um atributo `prioridade`, que poderá assumir os valores "Baixa", "Média" ou "Alta".
+* **Justificativa:** A inclusão da prioridade permitirá aos usuários organizar melhor suas tarefas, focar em itens críticos e otimizar o fluxo de trabalho, aumentando a eficiência operacional da TechFlow Solutions.
+* **Impacto no Projeto:**
+    * **Modelagem UML:** Necessidade de atualização do Diagrama de Classes (adicionar atributo `prioridade` à classe `Tarefa`).
+    * **Código:** Modificação da estrutura de dados da tarefa (`src/app.py`), ajuste nas funções de criação e atualização de tarefas para incluir/manipular a prioridade.
+    * **Testes:** Criação ou atualização de testes unitários (`tests/test_app.py`) para validar a funcionalidade da prioridade.
+    * **Documentação:** Atualização do `README.md` e do Quadro Kanban.
+* **Gestão da Mudança:** Um novo card "Implementar Prioridade em Tarefas" foi adicionado à coluna "To do" no Quadro Kanban para rastrear o desenvolvimento dessa funcionalidade.
 
 ## 8. Modelagem UML
 
